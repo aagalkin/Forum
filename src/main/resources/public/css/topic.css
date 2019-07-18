@@ -1,0 +1,137 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #FFFFE0;
+}
+
+.content {
+	width: 1350px;
+	margin: auto;
+	background-color: #D3D3D3;
+}
+
+.message-block {
+	width: inherit;
+	height: auto;
+	border-bottom-style: solid;
+	border-top-style: solid;
+	border-color: white;
+}
+
+.author-block {
+	min-height: 250px;
+	width: 270px;
+	background-color: #D3D3D3;
+	display: inline-block;
+	padding: 20px;
+}
+
+.message-body-block {
+	background-color: white;
+	width: 1079px;
+	height: 0;
+}
+
+.vertical-separator {
+	width: 1px;
+	background-color: #808080;
+}
+
+.horizontal-separator {
+	height: 1px;
+	background-color: #808080;
+}
+
+.author-name {
+	font-size: 24px;
+	color: orange;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.author-name:hover {
+	text-decoration: underline;
+}
+
+.author-avatar {
+	margin: 10px 0;
+}
+
+.author-info {
+	font-size: 14px;
+}
+
+.message-info-block, .signature{
+	display: inline-block;
+	height: auto;
+	width: 100%;
+	padding: 0 10px;
+}
+
+.message-info-block a:link, .message-info-block a:visited {
+	color: #346;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.message-info-block a:hover {
+	text-decoration: underline;
+}
+
+.auto-height {
+	height: 0;
+}
+
+.message-text {
+	padding: 10px;
+	display: inline-block;
+}
+
+.btn1 {
+	text-align: center;
+	width: 100px;
+	height: 20px;
+	display: inline-block;
+	border-radius: 40%;
+	font-size: 14px;
+	cursor: pointer;
+	user-select: none;
+	color: white;
+	background: linear-gradient(to bottom, #4682B4, #87CEFA);
+	box-shadow: -1px 2px 1px rgba(0,0,0,0.5);
+	line-height: 1.4;
+	position: absolute;
+	right: 0;
+	text-decoration: none;
+}
+
+.btn1:active {
+	box-shadow: 0 0 0 rgba(0,0,0,0.5);
+	margin-top: 5px;
+	margin-left: -.5px;
+	top: 12px;
+	right: 3px;
+}
+
+.wysiwyg {
+	position: relative;
+	width: 1350px;
+	height: 500px;
+}
+
+.navigation {
+	margin-top: 3px;
+	font-size: 16px;
+	display: inline-block;
+}
+
+.navigation a:link, .navigation a:visited {
+	text-decoration: none;
+	color: black;
+}
+
+.navigation a:hover {
+	text-decoration: underline;
+}

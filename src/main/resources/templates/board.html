@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/css/pagination.css">
+    <title>Общалка</title>
+</head>
+<body>
+<!--Header-->
+<div class="header">
+	<div class="logo-block">
+		<a href="/" title="На главную" style="width: inherit; height: inherit;">
+			<img src="/img/logo.png" alt="Some Forum" class="logo">
+		</a>
+	</div>
+	<div th:if="${forum_user}" class="forum-user-card">
+		<div id="dropdown-menu" class="hide-menu">
+			<div class="dropdown-menu-item"><a href="/profile">Профиль</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=settings">Общие настройки</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=security">Безопасность</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=email">Email</a></div>
+		</div>
+		<div class="avatar-holder">
+			<a href="/profile"><img th:src="@{'/user/avatar/' + ${forum_user.id}}" width="85px" height="85px" style="border-radius: 50%;"></a>
+			<a href="/logout"><img src="/img/close.png" width="15px" height="15px" class="logout-btn"></a>
+		</div>
+		<span id="forum-user-nickname">[[${forum_user.nickname}]] <span style="font-size: 12px;" id="dropdown-menu-btn">▼</span></span>
+	</div>
+	<div style="float: right; position: relative; height: 100%;" th:if="${forum_user}">
+		<div style="position: absolute; bottom: 0; font-size: 30px; cursor: pointer;" class="mail-href">
+			<div class="total-unread-count" th:if="${totalUnreadCount gt 0}">[[${totalUnreadCount}]]</div>
+			<a  href="/mail">✉</a>
+		</div>
+	</div>
+	<ul th:unless="${forum_user}" class="auth">
+		<li><a href="/login">Вход</a></li>
+		<li style="width: 100px;"><a href="/registration">Регистрация</a></li>
+	</ul>
+</div>
+<!--Search panel-->
+<div class="search-panel">
+	<form>
+	Поиск: <input type="text" name="" class="search-field"> по 
+		<select id="search-filter">
+			<option value="all">Всему</option>
+			<option value="topic">Назниваниям тем</option>
+			<option value="messages">Сообщениям</option>
+		</select>
+		<button>Поиск</button>
+	</form>
+	<span id="extra-search-button">
+		Расширенный поиск <span id="search-open">▼</span>
+	</span>	
+	<hr class="hide-menu" id="extra-search-separator">
+	<div id="extra-search-panel" class="hide-menu">
+		<h3>TODO</h3>
+	</div>
+</div>
+<div class="btn-panel">
+	<div class="navigation">
+		<a href="/">Начало</a>
+		&#8594;
+		<span style="font-weight: bold;">[[${board.name}]]</span>
+	</div>
+</div>
+
+<!--Content-->
+
+<!--pagination-->
+<div class="pagination-block" th:if="${board.topics.size() > 20}" style="padding-bottom: 48px;">
+	<a th:unless="${pagination.page == 1}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page - 1}}" class="pagination-btn">&#8656;</a>
+	<a th:unless="${pagination.page - 4 < 1}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page - 4}}" class="pagination-btn">[[${pagination.page - 4}]]</a>
+	<a th:unless="${pagination.page - 3 < 1}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page - 3}}" class="pagination-btn">[[${pagination.page - 3}]]</a>
+	<a th:unless="${pagination.page - 2 < 1}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page - 2}}" class="pagination-btn">[[${pagination.page - 2}]]</a>
+	<a th:unless="${pagination.page - 1 < 1}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page - 1}}" class="pagination-btn">[[${pagination.page - 1}]]</a>
+	<a class="pagination-btn pagination-btn-pressed" disabled>[[${pagination.page}]]</a>
+	<a th:unless="${pagination.page + 1 > pagination.lastPage}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page + 1}}" class="pagination-btn">[[${pagination.page + 1}]]</a>
+	<a th:unless="${pagination.page + 2 > pagination.lastPage}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page + 2}}" class="pagination-btn">[[${pagination.page + 2}]]</a>
+	<a th:unless="${pagination.page + 3 > pagination.lastPage}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page + 3}}" class="pagination-btn">[[${pagination.page + 3}]]</a>
+	<a th:unless="${pagination.page + 4 > pagination.lastPage}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page + 4}}" class="pagination-btn">[[${pagination.page + 4}]]</a>
+	<a th:unless="${pagination.page + 1 > pagination.lastPage}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page + 1}}" class="pagination-btn">&#8658;</a>
+</div>
+
+<div class="content">
+	<table class="sector">
+		<tr>
+			<td class="sector-header">
+				<div class="sector-header-open"></div>
+				<span>[[${board.name}]]</span>
+				<a th:href="@{'/topic/create?board=' + ${board.id}}" class="btn2" th:if="${forum_user}">Создать тему</a>
+				<div class="sector-header-close"></div>
+			</td>
+		</tr>
+		<!--topics-->
+
+
+
+		<table th:each="topic: ${topics}">
+			<tr>
+				<td class="board">
+					<table>
+						<tr>
+							<td class="board-name board-block">
+								<a th:href="@{'/topic/' + ${topic.id} + '/1'}">[[${topic.name}]]</a>
+								<p>[[${topic.desc}]]</p>
+								<p>автор [[${topic.author.nickname}]]</p>
+							</td>
+							<td class="vertical-separator"></td>
+							<td class="board-counter board-block">
+								<span>[[${topic.forumMessages.size() - 1}]] ответов</span>
+							</td>
+							<td class="vertical-separator"></td>
+							<td class="board-last-active board-block">
+								<span><span style="font-weight: bold;">Последнее сообщение</span> от <a th:href="@{'/user/' + ${topic.getLastMessage().author.id}}">[[${topic.getLastMessage().author.nickname}]]</a></span><br>
+								<span>в [[${#dates.format(topic.getLastMessage().createTime, 'dd-MM-yyyy HH:mm')}]]</span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr><!--<td class="horizontal-separator"></td>--><hr style="margin: 0"></tr>
+		</table>
+		<!--end subsection-->
+	</table>
+</div>
+
+<!--pagination-->
+<div class="pagination-block" th:if="${board.topics.size() > 20}" style="padding-bottom: 48px;">
+	<a th:unless="${pagination.page == 1}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page - 1}}" class="pagination-btn">&#8656;</a>
+	<a th:unless="${pagination.page - 4 < 1}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page - 4}}" class="pagination-btn">[[${pagination.page - 4}]]</a>
+	<a th:unless="${pagination.page - 3 < 1}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page - 3}}" class="pagination-btn">[[${pagination.page - 3}]]</a>
+	<a th:unless="${pagination.page - 2 < 1}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page - 2}}" class="pagination-btn">[[${pagination.page - 2}]]</a>
+	<a th:unless="${pagination.page - 1 < 1}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page - 1}}" class="pagination-btn">[[${pagination.page - 1}]]</a>
+	<a class="pagination-btn pagination-btn-pressed" disabled>[[${pagination.page}]]</a>
+	<a th:unless="${pagination.page + 1 > pagination.lastPage}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page + 1}}" class="pagination-btn">[[${pagination.page + 1}]]</a>
+	<a th:unless="${pagination.page + 2 > pagination.lastPage}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page + 2}}" class="pagination-btn">[[${pagination.page + 2}]]</a>
+	<a th:unless="${pagination.page + 3 > pagination.lastPage}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page + 3}}" class="pagination-btn">[[${pagination.page + 3}]]</a>
+	<a th:unless="${pagination.page + 4 > pagination.lastPage}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page + 4}}" class="pagination-btn">[[${pagination.page + 4}]]</a>
+	<a th:unless="${pagination.page + 1 > pagination.lastPage}" th:href="@{'/board/' + ${board.id} + '/' + ${pagination.page + 1}}" class="pagination-btn">&#8658;</a>
+</div>
+
+<script type="text/javascript" src="/js/header-menu.js"></script>
+</body>
+</html>

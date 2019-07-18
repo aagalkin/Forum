@@ -1,0 +1,40 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #FFFFE0;
+	font-size: 18px;
+}
+
+.content {
+	width: 1350px;
+	background-color: #D3D3D3;
+	margin: auto;
+}
+
+.fromto-panel a:link, .fromto-panel a:visited {
+	color: black;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.fromto-panel a:hover {
+	text-decoration: underline;
+}
+
+.theme-panel {
+
+}
+
+.text-panel {
+	height: 200px;
+	overflow: auto;
+	word-wrap: break-word;
+}
+
+.answer-panel {
+	text-align: right;
+	padding: 0 15px;
+	padding-bottom: 12px;
+}

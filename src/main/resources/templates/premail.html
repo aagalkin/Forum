@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/wysiwyg.css">
+    <title>Создание новой темы</title>
+</head>
+<body>
+<!--Header-->
+<div class="header">
+	<div class="logo-block">
+		<a href="/" title="На главную" style="width: inherit; height: inherit;">
+			<img src="/img/logo.png" alt="Some Forum" class="logo">
+		</a>
+	</div>
+	<div th:if="${forum_user}" class="forum-user-card">
+		<div id="dropdown-menu" class="hide-menu">
+			<div class="dropdown-menu-item"><a href="/profile">Профиль</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=settings">Общие настройки</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=security">Безопасность</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=email">Email</a></div>
+		</div>
+		<div class="avatar-holder">
+			<a href="/profile"><img th:src="@{'/user/avatar/' + ${forum_user.id}}" width="85px" height="85px" style="border-radius: 50%;"></a>
+			<a href="/logout"><img src="/img/close.png" width="15px" height="15px" class="logout-btn"></a>
+		</div>
+		<span id="forum-user-nickname">[[${forum_user.nickname}]] <span style="font-size: 12px;" id="dropdown-menu-btn">▼</span></span>
+	</div>
+	<div style="float: right; position: relative; height: 100%;" th:if="${forum_user}">
+		<div style="position: absolute; bottom: 0; font-size: 30px; cursor: pointer;" class="mail-href">
+			<div class="total-unread-count" th:if="${totalUnreadCount gt 0}">[[${totalUnreadCount}]]</div>
+			<a  href="/mail">✉</a>
+		</div>
+	</div>
+	<ul th:unless="${forum_user}" class="auth">
+		<li><a href="/login">Вход</a></li>
+		<li style="width: 100px;"><a href="/registration">Регистрация</a></li>
+	</ul>
+</div>
+<!--Search panel-->
+<div class="search-panel">
+	<form>
+	Поиск: <input type="text" name="" class="search-field"> по 
+		<select id="search-filter">
+			<option value="all">Всему</option>
+			<option value="topic">Назниваниям тем</option>
+			<option value="messages">Сообщениям</option>
+		</select>
+		<button>Поиск</button>
+	</form>
+	<span id="extra-search-button">
+		Расширенный поиск <span id="search-open">▼</span>
+	</span>	
+	<hr class="hide-menu" id="extra-search-separator">
+	<div id="extra-search-panel" class="hide-menu">
+		<h3>TODO</h3>
+	</div>
+</div>
+<div class="btn-panel"></div>	
+
+<!--Content-->
+<div class="wysiwyg" style="height: 700px; width: 1200px; margin: auto;">
+	<h3 style="text-align: center;">Отправка личного сообщения</h3>
+
+
+	
+
+	<form action="/mail/send" method="post">
+		<div style="margin: auto; width: 960px;">
+			<span>Кому:</span>
+			<input type="text" name="recipient" th:value="${recipient} ? ${recipient}"><br>
+
+			<span>Тема:</span>
+			<input type="text" name="theme" th:value="${theme} ? ${theme}"><br>
+			<input type="hidden" name="text" value="" id="text">
+		</div>
+		<div class="message-panel" style="height: 60%; position: relative;">
+			<div class="message-panel-block">
+				<div class="message-block-tools">
+					<div class="btn3" id="bold" value="bold"><b>b</b></div>
+					<div class="btn3" id="cursive" value="italic"><i>I</i></div>
+					<span>Цвет текста:</span>
+					<select id="font-color-selector">
+						<option value="black" style="color: black">Чёрный</option>
+						<option value="red" style="color: red">Красный</option>
+						<option value="blue" style="color: blue;">Синий</option>
+						<option value="yellow" style="color: yellow;">Желтый</option>
+						<option value="green" style="color: green;">Зелёный</option>
+					</select>
+				</div>
+				<div id="message-body" contenteditable="true" style="min-height: 200px; border-style: solid; border-width: 1px;">[[${text}]]</div>
+				<div class="submit-panel">
+					<input type="submit" name="" id="submit">
+					<input type="button" name="" value="Отмена">
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript" src="/js/header-menu.js"></script>
+<script type="text/javascript" src="/js/wysiwyg.js"></script>
+</body>
+</html>

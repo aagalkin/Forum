@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title>My Forum</title>
+</head>
+<body>
+<div class="popup-bg hide"></div>
+<div class="popup-holder hide" th:if="${forum_user?.role?.toString() == 'ADMIN'}">
+	<div id="sector-create-form" class="hide">
+		<form action="/sector/create" method="post">
+			<span style="user-select: none;">Имя нового раздела:</span>
+			<input type="text" name="name">
+			<input type="submit" name="" value="Создать">
+		</form>
+	</div>
+	<div id="sector-delete-form" class="hide">
+		<form action="/sector/delete" method="post">
+			<span>Будет удалён весь раздел со всем его содержимым!!!</span>
+			<br>
+			<h3>Вы уверены?</h3>
+			<br>
+			<input type="submit" name="" value="Удалить">
+			<input type="button" name="" value="Отмена" id="sector-delete-form-close-btn">
+			<input type="hidden" name="id" value="" id="sector-id-sector-delete-form">
+		</form>
+	</div>
+	<div id="board-create-form" class="hide">
+		<form action="/board/create" method="post">
+			<span style="user-select: none;">Имя нового подраздела:</span>
+			<input type="text" name="name">
+			<br>
+			<span style="user-select: none;">Описание нового подраздела:</span>
+			<input type="text" name="desc">
+			<br>
+			<input type="hidden" name="sectorId" value="" id="sector-id-board-create-form">
+			<input type="submit" name="">
+		</form>
+	</div>
+	<div id="board-delete-form" class="hide">
+		<form action="/board/delete" method="post">
+			<span>Выберите подраздел для удаления:</span>
+			<select id="board-list" required name="id"></select>
+			<br>
+			<input type="submit" name="" value="Удалить">
+			<input type="button" name="" value="Отмена" id="board-delete-form-close-btn">
+		</form>
+	</div>
+</div>
+<!--Header-->
+<div class="header">
+	<div class="logo-block">
+		<a href="/" title="На главную" style="width: inherit; height: inherit;">
+			<img src="/img/logo.png" alt="Some Forum" class="logo">
+		</a>
+	</div>
+	<div th:if="${forum_user}" class="forum-user-card">
+		<div id="dropdown-menu" class="hide-menu">
+			<div class="dropdown-menu-item"><a href="/profile">Профиль</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=settings">Общие настройки</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=security">Безопасность</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=email">Email</a></div>
+		</div>
+		<div class="avatar-holder">
+			<a href="/profile"><img th:src="@{'/user/avatar/' + ${forum_user.id}}" width="85px" height="85px" style="border-radius: 50%;"></a>
+			<a href="/logout"><img src="/img/close.png" width="15px" height="15px" class="logout-btn"></a>
+		</div>
+		<span id="forum-user-nickname">[[${forum_user.nickname}]] <span style="font-size: 12px;" id="dropdown-menu-btn">▼</span></span>
+	</div>
+	<div style="float: right; position: relative; height: 100%;" th:if="${forum_user}">
+		<div style="position: absolute; bottom: 0; font-size: 30px; cursor: pointer;" class="mail-href">
+			<div class="total-unread-count" th:if="${totalUnreadCount gt 0}">[[${totalUnreadCount}]]</div>
+			<a  href="/mail">✉</a>
+		</div>
+	</div>
+	<ul th:unless="${forum_user}" class="auth">
+		<li><a href="/login">Вход</a></li>
+		<li style="width: 100px;"><a href="/registration">Регистрация</a></li>
+	</ul>
+</div>
+<!--Search panel-->
+<div class="search-panel">
+	<form>
+	Поиск: <input type="text" name="" class="search-field"> по 
+		<select id="search-filter">
+			<option value="all">Всему</option>
+			<option value="topic">Назниваниям тем</option>
+			<option value="messages">Сообщениям</option>
+		</select>
+		<button>Поиск</button>
+	</form>	
+	<span id="extra-search-button">
+		Расширенный поиск <span id="search-open">▼</span>
+	</span>
+	<hr class="hide-menu" id="extra-search-separator">
+	<div id="extra-search-panel" class="hide-menu">
+		<h3>TODO</h3>
+	</div>
+</div>
+<div class="btn-panel">
+	<div class="btn1" id="sector-create-btn" th:if="${forum_user?.role?.toString() == 'ADMIN'}">Новый раздел</div>
+</div>
+
+<!--Content-->
+<div class="content">
+	<table th:each="sector: ${sectors}" class="sector">
+		<tr>
+			<td class="sector-header">
+				<div class="sector-header-open"></div>
+				<span>[[${sector.name}]]</span>
+				<div class="btn2 board-create-btn" th:sectorid="${sector.id}" th:if="${forum_user?.role?.toString() == 'ADMIN'}">Новый подраздел</div>
+				<div class="btn2 board-delete-btn" th:sectorid="${sector.id}" th:if="${forum_user?.role?.toString() == 'ADMIN'}">Удалить подраздел</div>
+				<div class="btn2 sector-delete-btn" th:sectorid="${sector.id}" th:if="${forum_user?.role?.toString() == 'ADMIN'}">Удалить этот раздел</div>
+				<div class="sector-header-close"></div>
+			</td>
+		</tr>
+		<!--subsection-->
+		<table th:each="board: ${sector.boards}">
+			<tr>
+				<td class="board">
+					<table>
+						<tr>
+							<td class="board-name board-block">
+								<a th:href="@{'/board/' + ${board.id} + '/1'}">[[${board.name}]]</a>
+								<p>[[${board.desc}]]</p>
+							</td>
+							<td class="vertical-separator"></td>
+							<td class="board-counter board-block">
+								<span>[[${board.topics.size()}]] тем</span>
+								<br/>
+								<span>[[${board.getCountOfMessages()}]] сообщений</span>
+							</td>
+							<td class="vertical-separator"></td>
+							<td th:if="${board.getLatestTopic()}" class="board-last-active board-block">
+								<span><span>ответ</span> от <a th:href="@{'/user/' + ${board.getLatestTopic().getLastMessage().author.id}}">[[${board.getLatestTopic().getLastMessage().author.nickname}]]</a></span><br>
+								<span>в <a th:href="@{'/topic/' + ${board.getLatestTopic().id} + '/1'}">[[${board.getLatestTopic().name}]]</a></span><br>
+								<span>в [[${#dates.format(board.getLatestTopic().getLastMessage().createTime, 'dd-MM-yyyy HH:mm')}]]</span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr><td class="horizontal-separator"></td></tr>
+		</table>
+		<!--end subsection-->
+	</table>
+</div>
+
+<script type="text/javascript" src="/js/header-menu.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+</body>
+</html>

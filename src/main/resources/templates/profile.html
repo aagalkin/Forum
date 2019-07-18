@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Профиль пользователя [[${forum_user.nickname}]]</title>
+	<link rel="stylesheet" type="text/css" href="/css/profile.css">
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
+</head>
+<body>
+<div class="popup-bg hidden"></div>
+<div class="popup-holder hidden">
+	<div id="avatar-form">
+		<form action="/user/disavatar" method="post">
+			<input type="submit" name="" value="Удалить аватар(будет установлен стандартный)">
+		</form>
+		<hr>
+		<form method="post" enctype="multipart/form-data" action="/user/avatar">
+			<div>
+		    	<input type="file" id="profile_pic" name="img" accept=".jpg, .jpeg">
+		  	</div>
+		  	<div style="text-align: center; margin: 20px 0;">
+		    	<input type="submit" name="">
+		  	</div>
+		</form>
+	</div>
+</div>
+
+<!--Header-->
+<input type="hidden" name="" id="forum-user-id" th:value="${forum_user.id}">
+<div class="header">
+	<div class="logo-block">
+		<a href="/" title="На главную" style="width: inherit; height: inherit;">
+			<img src="/img/logo.png" alt="Some Forum" class="logo">
+		</a>
+	</div>
+	<div th:if="${forum_user}" class="forum-user-card">
+		<div id="dropdown-menu" class="hide-menu">
+			<div class="dropdown-menu-item"><a href="/profile">Профиль</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=settings">Общие настройки</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=security">Безопасность</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=email">Email</a></div>
+		</div>
+		<div class="avatar-holder">
+			<a href="/profile"><img th:src="@{'/user/avatar/' + ${forum_user.id}}" width="85px" height="85px" style="border-radius: 50%;"></a>
+			<a href="/logout"><img src="/img/close.png" width="15px" height="15px" class="logout-btn"></a>
+		</div>
+		<span id="forum-user-nickname">[[${forum_user.nickname}]] <span style="font-size: 12px;" id="dropdown-menu-btn">▼</span></span>
+	</div>
+	<div style="float: right; position: relative; height: 100%;" th:if="${forum_user}">
+		<div style="position: absolute; bottom: 0; font-size: 30px; cursor: pointer;" class="mail-href">
+			<div class="total-unread-count" th:if="${totalUnreadCount gt 0}">[[${totalUnreadCount}]]</div>
+			<a  href="/mail">✉</a>
+		</div>
+	</div>
+	<ul th:unless="${forum_user}" class="auth">
+		<li><a href="/login">Вход</a></li>
+		<li style="width: 100px;"><a href="/registration">Регистрация</a></li>
+	</ul>
+</div>
+<!--Search panel-->
+<div class="search-panel">
+	<form>
+	Поиск: <input type="text" name="" class="search-field"> по 
+		<select id="search-filter">
+			<option value="all">Всему</option>
+			<option value="topic">Назниваниям тем</option>
+			<option value="messages">Сообщениям</option>
+		</select>
+		<button>Поиск</button>
+	</form>
+	<span id="extra-search-button">
+		Расширенный поиск <span id="search-open">▼</span>
+	</span>	
+	<hr class="hide-menu" id="extra-search-separator">
+	<div id="extra-search-panel" class="hide-menu">
+		<h3>TODO</h3>
+	</div>
+</div>
+<div class="btn-panel">
+
+</div>
+
+<!--Content-->
+<div class="content">
+	<table style="height: 100%;">
+		<tr>
+			<td style="vertical-align: top;">
+				<div style="text-align: center;"><b>[[${forum_user.nickname}]]</b></div>
+				<div style="text-align: center; position: relative;" id="avatar-holder">
+					<div class="hidden" id="ava-bg">Изменить аватар</div>
+					<img th:src="@{'/user/avatar/' + ${forum_user.id}}" width="150px" height="150px" id="avatar">
+				</div>
+				<table>
+					<tr>
+						<td class="profile-menu" th:classappend="${form == 'profile'} ? profile-menu-active">
+							<a href="/profile">Профиль</a>
+						</td>
+					</tr>
+					<tr>
+						<td class="profile-menu" th:classappend="${form == 'settings'} ? profile-menu-active">
+							<a href="/profile?form=settings"> Общие настройки </a>
+						</td>
+					</tr>
+					<tr>
+						<td class="profile-menu" th:classappend="${form == 'security'} ? profile-menu-active">
+							<a href="/profile?form=security"> Безопасность </a>
+						</td>
+					</tr>
+					<tr>
+						<td class="profile-menu" th:classappend="${form == 'email'} ? profile-menu-active">
+							<a href="/profile?form=email">EMail</a>
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td class="vertical-separator"></td>
+			<td class="profile-content">
+
+				<!--info-->
+				<div id="info" class="form-holder" th:if="${form == 'profile'}">
+					<h3>Профиль пользователя [[${forum_user.nickname}]]</h3>
+					<form action="/fuser/profile">
+						<div style="border-bottom-style: dashed; border-width: 1px; margin-bottom: 10px;">
+							<div class="half">
+								<b>Пол:</b>
+							</div>
+							<div class="half" th:switch="${forum_user.gender.toString()}">
+								<span th:case="MALE">мужчина</span>
+								<span th:case="FEMALE">женщина</span>
+								<span th:case="*">не указано</span>
+							</div>
+						</div>
+						<div style="border-bottom-style: dashed; border-width: 1px; margin-bottom: 10px;">
+							<div class="half">
+								<b>Дата рождения:</b>
+							</div>
+							<div class="half">
+								<span th:text="${forum_user.dateOfBirth == null} ? 'не укаказано' : ${#dates.format(forum_user.dateOfBirth, 'dd.MM.yyyy')}"></span>
+							</div>
+						</div>
+						<div style="border-bottom-style: dashed; border-width: 1px; margin-bottom: 10px;">
+							<div class="half">
+								<b>Всего сообщений:</b>
+							</div>
+							<div class="half">
+								<span>[[${forum_user.forumMessages.size()}]]</span>
+							</div>
+						</div>
+						<div style="border-bottom-style: dashed; border-width: 1px; margin-bottom: 10px;">
+							<div class="half">
+								<b>Дата регистрации:</b>
+							</div>
+							<div class="half">
+								<span>[[${#dates.format(forum_user.regDate, 'dd.MM.yyyy')}]]</span>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<!--settings form-->
+				<div id="settings" class="form-holder" th:if="${form == 'settings'}">
+					<h3>Настройки безопасности</h3>
+					<form action="/user/data" method="post">
+						<div>
+							<div class="half">
+								<b>Пол:</b>
+							</div>
+							<div class="half">
+								<label for="male">мужчина</label><input type="radio" name="gender" value="male" id="male" th:checked="${forum_user.gender.toString() == 'MALE'}">
+								<label for="female">женщина</label><input type="radio" name="gender" value="female" id="female" th:checked="${forum_user.gender.toString() == 'FEMALE'}">
+								<label for="unknown">не известно</label><input type="radio" name="gender" value="unknown" id="unknown" th:checked="${forum_user.gender.toString() != 'MALE' and forum_user.gender.toString() != 'FEMALE'}">
+							</div>
+						</div>
+						<hr>
+						<div>
+							<div class="half">
+								<b>Дата рождения:</b>
+							</div>
+							<div class="half">
+								<span>Год:</span>
+								<select id="year-selector" name="year-of-birth">
+									<option value="none" selected="" disabled="">Выберите год</option>
+								</select>
+								<span>Месяц:</span>
+								<select disabled="" id="month-selector" name="month-of-birth">
+									<option value="none" disabled="" selected="">Выберите месяц</option>
+									<option value="1">Января</option>
+									<option value="2">Февраля</option>
+									<option value="3">Марта</option>
+									<option value="4">Апреля</option>
+									<option value="5">Мая</option>
+									<option value="6">Июня</option>
+									<option value="7">Июля</option>
+									<option value="8">Августа</option>
+									<option value="9">Сентября</option>
+									<option value="10">Октября</option>
+									<option value="11">Ноября</option>
+									<option value="12">Дакабря</option>
+								</select>
+								<span>День:</span>
+								<select id="day-selector" disabled="" name="day-of-birth">
+									<option value="none" disabled="" selected="">Выберите день</option>
+								</select>
+							</div>
+						</div>
+						<hr>
+						<div class="half">
+							<b>Подпись:</b>
+						</div>
+						<div class="half">
+							<input type="text" name="signature" th:value="${forum_user.signature}">
+						</div>
+						<div class="submit-panel"><input type="submit" name="" value="сохранить"></div>
+					</form>
+				</div>
+
+				<!--security form-->
+				<div id="security" class="form-holder" th:if="${form == 'security'}">
+					<h3>Настройки безопасности</h3>
+					<form action="/user/changepassword" method="post">
+						<input type="hidden" name="salt" th:value="${salt}" id="salt">
+						<input type="hidden" name="new-password" value="" id="new-password">
+						<input type="hidden" name="renew-password" value="" id="renew-password">
+						<input type="hidden" name="old-password" value="" id="old-password">
+						<div>
+							<div class="half">
+								<b>Новый пароль:</b>
+							</div>
+							<div class="half">
+								<input type="password" name="" id="new-password-field">
+							</div>
+						</div>
+						<div>
+							<div class="half">
+								<b>Еще раз новый пароль:</b>
+							</div>
+							<div class="half">
+								<input type="password" name="" id="renew-password-field">
+							</div>
+						</div>
+						<hr>
+						<div>
+							<div class="half">
+								<b>Ваш пароль:</b>
+								<br>
+								<small>В целях безопасности для принятия изменений необходимо ввести пароль.</small>
+							</div>
+							<div class="half" style="vertical-align: top;">
+								<input type="password" name="" id="old-password-field">
+							</div>
+						</div>
+						<div class="submit-panel"><input type="submit" name="" value="сохранить" id="cp"></div>
+					</form>
+				</div>
+
+				<!--email form-->
+				<div id="email" class="form-holder" th:if="${form == 'email'}">
+					<h3 style="">Настройка email</h3>
+					<form action="/user/email" method="post">
+						<input type="hidden" name="salt" th:value="${salt}" id="salt">
+						<input type="hidden" name="password" value="" id="old-password">
+						<div>
+							<div class="half">
+								<b>Новый email:</b>
+							</div>
+							<div class="half">
+								<input type="text" name="new-email">
+							</div>
+						</div>
+						<div>
+							<div class="half">
+								<b>Еще раз новый email:</b>
+							</div>
+							<div class="half">
+								<input type="text" name="renew-email">
+							</div>
+						</div>
+						<hr>
+						<div>
+							<div class="half">
+								<b>Ваш пароль:</b>
+								<br>
+								<small>В целях безопасности для принятия изменений необходимо ввести пароль.</small>
+							</div>
+							<div class="half" style="vertical-align: top;">
+								<input type="password" name="" id="old-password-field">
+							</div>
+						</div>
+						<div class="submit-panel"><input type="submit" name="" value="сохранить"></div>
+					</form>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<script type="text/javascript" src="/js/header-menu.js"></script>
+<script type="text/javascript" src="/js/date-chooser.js" th:if="${form == 'settings'}"></script>
+<script type="text/javascript" src="/js/date-loader.js" th:if="${form == 'settings'}"></script>
+<script type="text/javascript" th:if="${form == 'security' or form == 'email'}" src="/js/sha256.js"></script>
+<script type="text/javascript" th:if="${form == 'security' or form == 'email'}" src="/js/password-email-form.js"></script>
+<script type="text/javascript" src="/js/profile.js"></script>
+</body>
+</html>

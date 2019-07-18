@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+</head>
+<body>
+<style type="text/css">
+	.content {
+		background-color: #D3D3D3;
+		width: 60%;
+		height: 650px;
+		margin: auto;
+		position: fixed;
+		top: 150px;
+		left: 0;
+		right: 0;
+		text-align: center;
+		padding-top: 100px;
+	}
+
+	ul {
+		padding-inline-end: 40px;
+	}
+
+	li {
+		list-style: none;
+		text-align: left;
+		font-weight: bold;
+		font-size: 18px;
+		line-height: 2;
+	}
+
+	.desc {
+		display: inline-block;
+		text-align: right;
+		width: 50%;
+	}
+
+	.success-msg {
+		color: green;
+	}
+
+	.error-msg {
+		color: red;
+	}
+
+	.href {
+		color: black;
+		text-decoration: none;
+	}
+
+	.href:hover {
+		text-decoration: underline;
+	}
+</style>
+<div class="content">
+	<div style="text-align: center;">
+		<a href="/" class="href">На главную</a>
+		<br>
+		<span style="user-select: none;"><b>Вход</b></span> <div style="display: inline-block; border-right-width: 1px; border-right-style: solid; height: 11px;"></div><a href="/registration" class="href">Регистрация</a>
+	</div>
+	<header>
+		<h1 style="margin-bottom: 100px;">Вход:</h1>
+		<h3 class="success-msg">[[${msg}]]</h3>
+		<h3 class="error-msg">[[${reason}]]</h3>
+	</header>
+	<form action="/login" method="post">
+		<input type="hidden" name="salt" th:value="${salt}" id="salt">
+		<ul>
+			<li>
+				<div class="desc">Электронная почта(email):</div>
+				<input type="email" name="email" required class="user-input-field">
+			</li>
+			<li>
+				<div class="desc">Пароль:</div>
+				<input type="hidden" name="password" value="" id="password">
+				<input id="password-field" type="password" name="" class="user-input-field" required>
+			</li>
+		</ul>
+		<input type="submit" name="" class="submit-button" value="Вход" id="login">
+	</form>
+</div>
+<script type="text/javascript" src="/js/sha256.js"></script>
+<script type="text/javascript" src="/js/reg-login-form.js"></script>
+</body>
+</html>

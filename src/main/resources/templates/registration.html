@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+<body>
+<style type="text/css">
+	.content {
+		background-color: #D3D3D3;
+		width: 70%;
+		height: 650px;
+		margin: auto;
+		position: fixed;
+		top: 150px;
+		left: 0;
+		right: 0;
+		text-align: center;
+		padding-top: 100px;
+	}
+
+	ul {
+		padding-inline-end: 40px;
+	}
+
+	li {
+		list-style: none;
+		text-align: left;
+		font-weight: bold;
+		font-size: 18px;
+		line-height: 2;
+	}
+
+	.desc {
+		display: inline-block;
+		text-align: right;
+		width: 50%;
+	}
+
+	.info {
+		font-size: 14px;
+		color: red;
+	}
+
+	.error-msg {
+		color: red;
+	}
+
+	.href {
+		color: black;
+		text-decoration: none;
+	}
+
+	.href:hover {
+		text-decoration: underline;
+	}
+</style>
+<div class="content">
+	<div style="text-align: center;">
+		<a href="/" class="href">На главную</a>
+		<br>
+		<a href="/login" class="href">Вход</a> <div style="display: inline-block; border-right-width: 1px; border-right-style: solid; height: 11px;"></div> <span style="user-select: none;"><b>Регистрация</b></span>
+	</div>
+	<header>
+		<h1 style="margin-bottom: 150px;">Регистрация:</h1>
+		<h3 class="error-msg">[[${reason}]]</h3>
+	</header>
+	<form action="/registration" method="post">
+		<ul>
+			<li>
+				<div class="desc">Ваш всевдоним(будут видеть другие пользователи)<span class="info">*</span>:</div>
+				<input type="text" name="nickname" class="user-input-field" required>
+			</li>
+			<li>
+				<div class="desc">Электронная почта(email)<span class="info">*</span>:</div>
+				<input type="email" name="email" required class="user-input-field">
+			</li>
+			<li>
+				<div class="desc">Пароль<span class="info">*</span>:</div>
+				<input type="hidden" name="password" id="password" value="">
+				<input type="password" name="" class="user-input-field" id="password-field" required>
+			</li>
+			<li>
+				<div class="desc">Еще раз пароль<span class="info">*</span>:</div>
+				<input type="hidden" name="repassword" id="repassword">
+				<input type="password" name="" required class="user-input-field" id="repassword-field">
+			</li>
+			<li>
+				<div class="desc">Дата рождения:</div>
+				<span>Год:</span>
+				<select id="year-selector" name="year-of-birth">
+					<option value="none" selected="" disabled="">Выберите год</option>
+				</select>
+				<span>Месяц:</span>
+				<select disabled="" id="month-selector" name="month-of-birth">
+					<option value="none" disabled="" selected="">Выберите месяц</option>
+					<option value="1">Января</option>
+					<option value="2">Февраля</option>
+					<option value="3">Марта</option>
+					<option value="4">Апреля</option>
+					<option value="5">Мая</option>
+					<option value="6">Июня</option>
+					<option value="7">Июля</option>
+					<option value="8">Августа</option>
+					<option value="9">Сентября</option>
+					<option value="10">Октября</option>
+					<option value="11">Ноября</option>
+					<option value="12">Дакабря</option>
+				</select>
+				<span>День:</span>
+				<select id="day-selector" disabled="" name="day-of-birth">
+					<option value="none" disabled="" selected="">Выберите день</option>
+				</select>
+			</li>
+			<li>
+				<div class="desc" style="vertical-align: top;">Пол:</div>
+				<div style="display: inline-block;">
+					<input type="radio" name="gender" value="male" id="male">
+					<label for="male">Мужчина</label>
+					<br>
+					<input type="radio" name="gender" value="female" id="female">
+					<label for="female">Женщина</label>
+				</div>
+			</li>
+			<li>
+				<span class="info">Поле отмеченные '*' обязательны к заполнению.</span>
+			</li>
+		</ul>
+		<input type="submit" name="" class="submit-button" value="Регистрация" id="reg">
+	</form>
+</div>
+<script type="text/javascript" src="/js/sha256.js"></script>
+<script type="text/javascript" src="/js/reg-login-form.js"></script>
+<script type="text/javascript" src="/js/date-chooser.js"></script>
+</body>
+</html>

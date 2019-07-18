@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
+	<link rel="stylesheet" type="text/css" href="/css/mail.css">
+	<title>Личные сообщения</title>
+</head>
+<body>
+
+<!--Header-->
+<div class="header">
+	<div class="logo-block">
+		<a href="/" title="На главную" style="width: inherit; height: inherit;">
+			<img src="/img/logo.png" alt="Some Forum" class="logo">
+		</a>
+	</div>
+	<div th:if="${forum_user}" class="forum-user-card">
+		<div id="dropdown-menu" class="hide-menu">
+			<div class="dropdown-menu-item"><a href="/profile">Профиль</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=settings">Общие настройки</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=security">Безопасность</a></div>
+			<hr>
+			<div class="dropdown-menu-item"><a href="/profile?form=email">Email</a></div>
+		</div>
+		<div class="avatar-holder">
+			<a href="/profile"><img th:src="@{'/user/avatar/' + ${forum_user.id}}" width="85px" height="85px" style="border-radius: 50%;"></a>
+			<a href="/logout"><img src="/img/close.png" width="15px" height="15px" class="logout-btn"></a>
+		</div>
+		<span id="forum-user-nickname">[[${forum_user.nickname}]]<span style="font-size: 12px;" id="dropdown-menu-btn">▼</span></span>
+	</div>
+	<div style="float: right; position: relative; height: 100%;" th:if="${forum_user}">
+		<div style="position: absolute; bottom: 0; font-size: 30px; cursor: pointer;" class="mail-href">
+			<div class="total-unread-count" th:if="${totalUnreadCount gt 0}">[[${totalUnreadCount}]]</div>
+			<a  href="/mail">✉</a>
+		</div>
+	</div>
+	<ul th:unless="${forum_user}" class="auth">
+		<li><a href="/login">Вход</a></li>
+		<li style="width: 100px;"><a href="/registration">Регистрация</a></li>
+	</ul>
+</div>
+<!--Search panel-->
+<div class="search-panel">
+	<form>
+	Поиск: <input type="text" name="" class="search-field"> по 
+		<select id="search-filter">
+			<option value="all">Всему</option>
+			<option value="topic">Назниваниям тем</option>
+			<option value="messages">Сообщениям</option>
+		</select>
+		<button>Поиск</button>
+	</form>
+	<span id="extra-search-button">
+		Расширенный поиск <span id="search-open">▼</span>
+	</span>
+	<hr class="hide-menu" id="extra-search-separator">
+	<div id="extra-search-panel" class="hide-menu">
+		<h3>TODO</h3>
+	</div>
+</div>
+<div class="btn-panel" style="text-align: right;">
+	<a href="/mail/send"><div class="btn1" id="new-msg-btn">Новое письмо</div></a>
+</div>
+
+<div class="content">
+	<table style="min-height: 700px; width: 1350px;">
+		<tr>
+			<td id="users-list">
+					<div th:each="contact : ${contacts}">
+						<a th:href="@{'/mail?contactId=' + ${contact.id}}">
+							<div class="contact" th:classappend="${target.equals(contact)} ? contact-active">
+								<img th:src="@{'/user/avatar/' + ${contact.id}}" width="60px" height="75px" style="float: left;">
+								<div style="float: left; font-size: 24px; padding: 0 20px; padding-top: 7px;">[[${contact.nickname}]]</div>
+								<div class="unread-count" th:with="count=${counter.count(contact)}" th:text="${count gt 0} ? ${count}"></div>
+							</div>
+						</a>
+						<hr style="margin: 0">
+					</div>
+			</td>
+			<td id="msg-list">
+				<div class="answer-btn-holder">
+					<a th:href="@{'/mail/send?recipient=' + ${target.nickname}}" th:if="${target}"><button>Ответить</button></a>
+				</div>
+				<div>
+					<div class="msg" th:each="message : ${messages}">
+						<div class="theme-panel" th:classappend="${message.isRead == false and message.recipient.equals(forum_user)} ? bold"><a th:href="@{'/mail/letter?id=' + ${message.id}}">[[${message.theme}]]</a></div>
+						<div class="date-panel"><span>[[${#dates.format(message.date, 'dd-MM-yyyy HH:mm')}]]</span></div>
+						<div class="msg-type-panel">
+							<span th:if="${message.sender.equals(forum_user)}" style="color: blue">&#8657;</span>
+							<span th:if="${message.recipient.equals(forum_user)}" style="color: green">&#8659;</span>
+						</div>
+					</div>
+					<hr style="margin: 0;">
+				</div>
+
+			</td>
+		</tr>
+	</table>
+</div>
+
+<script type="text/javascript" src="/js/header-menu.js"></script>
+</body>
+</html>

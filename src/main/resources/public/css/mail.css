@@ -1,0 +1,125 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #FFFFE0;
+	font-size: 18px;
+}
+
+.btn1 {
+	text-align: center;
+	width: 100px;
+	height: 20px;
+	display: inline-block;
+	border-radius: 40%;
+	font-size: 14px;
+	cursor: pointer;
+	user-select: none;
+	color: white;
+	background: linear-gradient(to bottom, #4682B4, #87CEFA);
+	box-shadow: -1px 2px 1px rgba(0,0,0,0.5);
+	line-height: 1.4;
+}
+
+.btn1:active {
+	box-shadow: 0 0 0 rgba(0,0,0,0.5);
+	margin-top: 5px;
+	margin-left: -.5px;
+}
+
+.content {
+	width: 1350px;
+	background-color: #D3D3D3;
+	margin: auto;
+}
+
+#users-list {
+	width: 25%;
+	vertical-align: top;
+}
+
+#msg-list {
+	width: 75%;
+	vertical-align: top;
+	position: relative;
+	padding-bottom: 50px;
+	border-left-style: groove;
+}
+
+.contact {
+	width: 337.5px;
+ 	margin: 5px 0;
+ 	min-height: 80px;
+ 	padding: 2.5px 1em;
+ 	border-radius: 10px;
+ 	background: rgb(100,100,100) radial-gradient(circle at 0 0, rgba(255,255,255,.65), rgba(255,255,255,.35));
+ 	box-shadow:
+    inset rgba(0,0,0,.5) -3px -3px 8px,
+    inset rgba(255,255,255,.9) 3px 3px 8px,
+    rgba(0,0,0,.8) 3px 3px 8px -3px;
+    cursor: pointer;
+    user-select: none;
+    color: black;
+    position: relative;
+}
+
+.contact:active {
+	font-size: 20px;
+	box-shadow: inset 2px 2px 5px rgba(154, 147, 140, 0.5), 1px 1px 5px rgba(255, 255, 255, 1);
+}
+.contact-active {
+	font-size: 20px;
+	cursor: default;
+	box-shadow: inset 2px 2px 5px rgba(154, 147, 140, 0.5), 1px 1px 5px rgba(255, 255, 255, 1);
+}
+
+.msg {
+	border-width: 1px;
+	padding: 0 3%;
+}
+
+.theme-panel {
+	display: inline-block;
+	width: 80%;
+}
+
+.theme-panel a:link, .theme-panel a:visited {
+	color: black;
+	text-decoration: none;
+}
+
+.theme-panel a:hover {
+	text-decoration: underline;
+}
+
+.date-panel {
+	display: inline-block;
+	width: auto;
+}
+
+.msg-type-panel {
+	display: inline-block;
+	user-select: none;
+}
+
+.answer-btn-holder {
+	text-align: right;
+	position: absolute;
+	width: 1000px;
+	bottom: 0;
+	height: 50px;
+	padding: 10px 30px;
+	border-top-style: groove;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.unread-count {
+	background-color: #7CBBED;
+	border-radius: 50%;
+	user-select: none;
+	float: right;
+}
