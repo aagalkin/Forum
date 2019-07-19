@@ -21,10 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -249,25 +247,33 @@ public class ForumUserController {
     }
 
     @PostMapping("/user/disavatar")
-    public String disableAvatar(HttpServletRequest request) throws IOException, SQLException {
+    public String disableAvatar(HttpServletRequest request) throws IOException {
         HttpSession session = request.getSession();
         ForumUser forumUser = authService.getForumUserBySessionId(session.getId());
         if (forumUser == null) return "redirect:/";
 
-        HttpURLConnection connection = ((HttpURLConnection) new URL("https://" + request.getServerName() + "/avatar/default_" + forumUser.getGender().toString().toLowerCase() + ".jpg").openConnection());
-        MultipartFile multipartFile = (MultipartFile) connection.getContent();
         //File file = new File("/avatar/default_" + forumUser.getGender().toString() + ".jpg");
-        Blob blob = new SerialBlob(multipartFile.getBytes());
-//        try {
-//            blob = new SerialBlob(Files.readAllBytes(file.toPath()));
-//        } catch (SQLException | IOException e) {
-//            e.printStackTrace();
-//        }
+        String imageUrl = request.getScheme() + "//" + request.getServerName() + "/avatar/default_" + forumUser.getGender().toString().toLowerCase();
+        byte[] bytes = getDefaultAvatarFile(imageUrl);
+        Blob blob = null;
+        try {
+            blob = new SerialBlob(bytes);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         forumUser.setAvatar(blob);
         forumUser.setDefaultAvatar(true);
         forumUserDao.save(forumUser);
 
         return "redirect:/profile";
+    }
+
+    private byte[] getDefaultAvatarFile(String imageUrl) throws IOException {
+        URL url = new URL(imageUrl);
+        InputStream is = url.openStream();
+        byte[] result = new byte[is.available()];
+        is.read(result);
+        return result;
     }
 
     @GetMapping("/user/{id}")
