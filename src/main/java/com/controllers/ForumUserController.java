@@ -249,7 +249,7 @@ public class ForumUserController {
         ForumUser forumUser = authService.getForumUserBySessionId(session.getId());
         if (forumUser == null) return "redirect:/";
 
-        File file = new File("src/main/resources/public/avatar/default_" + forumUser.getGender().toString() + ".jpg");
+        File file = new File("/avatar/default_" + forumUser.getGender().toString() + ".jpg");
         Blob blob = null;
         try {
             blob = new SerialBlob(Files.readAllBytes(file.toPath()));
