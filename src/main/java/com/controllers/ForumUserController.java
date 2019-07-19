@@ -95,7 +95,7 @@ public class ForumUserController {
                                @RequestParam(name = "year-of-birth") String yearOfBirth,
                                @RequestParam(name = "month-of-birth") String monthOfBirth,
                                @RequestParam(name = "day-of-birth") String dayOfBirth,
-                               @RequestParam String signature) {
+                               @RequestParam String signature) throws IOException {
         HttpSession session = request.getSession();
         ForumUser forumUser = authService.getForumUserBySessionId(session.getId());
         if (forumUser == null) return "redirect:/login"; //Если не залогиненный, то кидает на страницу входа
@@ -121,12 +121,13 @@ public class ForumUserController {
         else if (gender.equalsIgnoreCase("female")) gdr = Gender.FEMALE;
         else gdr = Gender.UNKNOWN;
         forumUser.setGender(gdr);
-        File file = new File("src/main/resources/public/avatar/default_" + forumUser.getGender().toString() + ".jpg");
+        String imageUrl = request.getScheme() + "://" + request.getServerName() + "/avatar/default_" + forumUser.getGender().toString().toLowerCase() + ".jpg";
+        byte[] bytes = getDefaultAvatarFile(imageUrl);
         if (forumUser.getDefaultAvatar()) {
             Blob blob = null;
             try {
-                blob = new SerialBlob(Files.readAllBytes(file.toPath()));
-            } catch (SQLException | IOException e) {
+                blob = new SerialBlob(bytes);
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
             forumUser.setAvatar(blob);
@@ -252,7 +253,6 @@ public class ForumUserController {
         ForumUser forumUser = authService.getForumUserBySessionId(session.getId());
         if (forumUser == null) return "redirect:/";
 
-        //File file = new File("/avatar/default_" + forumUser.getGender().toString() + ".jpg");
         String imageUrl = request.getScheme() + "://" + request.getServerName() + "/avatar/default_" + forumUser.getGender().toString().toLowerCase() + ".jpg";
         byte[] bytes = getDefaultAvatarFile(imageUrl);
         Blob blob = null;

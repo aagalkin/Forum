@@ -14,6 +14,8 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.sql.Blob;
@@ -47,7 +49,7 @@ public class AuthService {
     }
 
     @Transactional
-    public void registerNewForumUser(String nickname, Date dayOfBirth, String password, String repassword, String email, Gender gender) {
+    public void registerNewForumUser(String nickname, Date dayOfBirth, String password, String repassword, String email, Gender gender, String schema, String serverName) throws IOException {
         if (!password.equals(repassword)) throw new RuntimeException("Пароли не совпадают");
         System.out.println("пароли совпадают");
         if (forumUserService.containsForumUserByNickname(nickname)) throw new RuntimeException("Этот псевдоним уже занят");
@@ -57,16 +59,25 @@ public class AuthService {
 
         ForumUser forumUser = forumUserFactory.createNewForumUser(nickname, dayOfBirth, password, email, gender);
 
-        File file = new File("/avatar/default_" + forumUser.getGender().toString() + ".jpg");
+        String imageUrl = schema + "://" + serverName + "/avatar/default_" + forumUser.getGender().toString().toLowerCase() + ".jpg";
+        byte[] bytes = getDefaultAvatarFile(imageUrl);
         Blob blob = null;
         try {
-            blob = new SerialBlob(Files.readAllBytes(file.toPath()));
-        } catch (SQLException | IOException e) {
+            blob = new SerialBlob(bytes);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         forumUser.setAvatar(blob);
         forumUser.setDefaultAvatar(true);
         forumUserDao.save(forumUser);
+    }
+
+    private byte[] getDefaultAvatarFile(String imageUrl) throws IOException {
+        URL url = new URL(imageUrl);
+        InputStream is = url.openStream();
+        byte[] result = new byte[is.available()];
+        is.read(result);
+        return result;
     }
 
     public boolean isContainsSessionId(String sessionId) {

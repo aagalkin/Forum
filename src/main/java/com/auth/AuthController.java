@@ -15,6 +15,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -119,7 +120,7 @@ public class AuthController {
         }
 
         try {
-            authService.registerNewForumUser(nickname, dateOfBirth, password, repassword, email, regGender);
+            authService.registerNewForumUser(nickname, dateOfBirth, password, repassword, email, regGender, request.getScheme(), request.getServerName());
             modelMap.put("msg", "Теперь Вы можете войти");
             String sessionId = request.getSession().getId();
             String ip = request.getRemoteAddr();
@@ -127,7 +128,7 @@ public class AuthController {
             authService.singForm(sessionId, ip, salt);
             modelMap.put("salt", salt);
             model.addAllAttributes(modelMap);
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | IOException e) {
             modelMap.put("reason", e.getMessage());
             model.addAllAttributes(modelMap);
             return "registration";
