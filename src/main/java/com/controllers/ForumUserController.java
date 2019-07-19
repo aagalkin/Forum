@@ -24,6 +24,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -253,7 +254,7 @@ public class ForumUserController {
         ForumUser forumUser = authService.getForumUserBySessionId(session.getId());
         if (forumUser == null) return "redirect:/";
 
-        HttpURLConnection connection = ((HttpURLConnection) new URL("/avatar/default_" + forumUser.getGender().toString() + ".jpg").openConnection());
+        HttpURLConnection connection = ((HttpURLConnection) new URL("https://" + InetAddress.getLocalHost() + "/avatar/default_" + forumUser.getGender().toString() + ".jpg").openConnection());
         MultipartFile multipartFile = (MultipartFile) connection.getContent();
         //File file = new File("/avatar/default_" + forumUser.getGender().toString() + ".jpg");
         Blob blob = new SerialBlob(multipartFile.getBytes());
