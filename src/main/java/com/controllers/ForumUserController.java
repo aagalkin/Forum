@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -229,6 +230,7 @@ public class ForumUserController {
         return "redirect:/profile";
     }
 
+    @Transactional
     @GetMapping(value = "/user/avatar/{userId}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getUserAvatar(@PathVariable Long userId) throws SQLException {
         ForumUser forumUser = forumUserDao.findById(userId).orElse(null);
