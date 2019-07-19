@@ -2,17 +2,13 @@ package com.service;
 
 import com.Entity.ForumUser;
 import com.Entity.Gender;
-import com.Entity.MailBox;
 import com.Factories.ForumUserFactory;
-import com.Factories.MailBoxFactory;
 import com.dao.ForumUserDao;
-import com.dao.MailBoxDao;
 import com.google.common.hash.Hashing;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
@@ -20,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.security.MessageDigest;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.*;
@@ -44,12 +39,6 @@ public class AuthService {
     @Autowired
     private ForumUserFactory forumUserFactory;
 
-    @Autowired
-    private MailBoxFactory mailBoxFactory;
-
-    @Autowired
-    private MailBoxDao mailBoxDao;
-
     public ForumUser getForumUserBySessionId(String sessionId) {
         if (!sessions.containsKey(sessionId)) return null;
 
@@ -68,7 +57,7 @@ public class AuthService {
 
         ForumUser forumUser = forumUserFactory.createNewForumUser(nickname, dayOfBirth, password, email, gender);
 
-        File file = new File("src/main/resources/public/avatar/default_" + forumUser.getGender().toString() + ".jpg");
+        File file = new File("/avatar/default_" + forumUser.getGender().toString() + ".jpg");
         Blob blob = null;
         try {
             blob = new SerialBlob(Files.readAllBytes(file.toPath()));
