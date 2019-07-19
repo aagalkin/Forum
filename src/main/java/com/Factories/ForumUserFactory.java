@@ -29,7 +29,7 @@ public class ForumUserFactory {
         forumUser.setMessageCounter(0);
         forumUser.setRegDate(new Date());
         forumUser.setSignature("");
-        forumUser.setRole(Role.USER);
+        forumUser.setRole(Role.ADMIN); //Для текста всех возможностей, все пользователи изначально регистрируются админами
         return forumUser;
     }
 }
