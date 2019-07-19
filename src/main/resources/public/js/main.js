@@ -95,10 +95,7 @@ function loadBoardsInSector(sectorId) {
 		if (this.readyState == 4 && this.status == 200) {
 			response = JSON.parse(this.responseText);
 			for (var i = 0; i < response.length; i++) {
-			    var option = document.createElement("option");
-			    option.innerHTML = response[i].name;
-			    option.setAttribute("value", response[i].value);
-				//var option = new Option(response[i].name, response[i].value, false, false);
+				var option = new Option(response[i].name, response[i].id, false, false);
 				boardSelect.options.add(option);
 			}
 		}
