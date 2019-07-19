@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,6 +23,9 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -244,18 +248,20 @@ public class ForumUserController {
     }
 
     @PostMapping("/user/disavatar")
-    public String disableAvatar(HttpServletRequest request) {
+    public String disableAvatar(HttpServletRequest request) throws IOException, SQLException {
         HttpSession session = request.getSession();
         ForumUser forumUser = authService.getForumUserBySessionId(session.getId());
         if (forumUser == null) return "redirect:/";
 
-        File file = new File("/avatar/default_" + forumUser.getGender().toString() + ".jpg");
-        Blob blob = null;
-        try {
-            blob = new SerialBlob(Files.readAllBytes(file.toPath()));
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
+        HttpURLConnection connection = ((HttpURLConnection) new URL("/avatar/default_" + forumUser.getGender().toString() + ".jpg").openConnection());
+        MultipartFile multipartFile = (MultipartFile) connection.getContent();
+        //File file = new File("/avatar/default_" + forumUser.getGender().toString() + ".jpg");
+        Blob blob = new SerialBlob(multipartFile.getBytes());
+//        try {
+//            blob = new SerialBlob(Files.readAllBytes(file.toPath()));
+//        } catch (SQLException | IOException e) {
+//            e.printStackTrace();
+//        }
         forumUser.setAvatar(blob);
         forumUser.setDefaultAvatar(true);
         forumUserDao.save(forumUser);
