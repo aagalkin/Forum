@@ -254,7 +254,7 @@ public class ForumUserController {
         ForumUser forumUser = authService.getForumUserBySessionId(session.getId());
         if (forumUser == null) return "redirect:/";
 
-        HttpURLConnection connection = ((HttpURLConnection) new URL("https://" + request.getServerName() + "/avatar/default_" + forumUser.getGender().toString() + ".jpg").openConnection());
+        HttpURLConnection connection = ((HttpURLConnection) new URL("https://" + request.getServerName() + "/avatar/default_" + forumUser.getGender().toString().toLowerCase() + ".jpg").openConnection());
         MultipartFile multipartFile = (MultipartFile) connection.getContent();
         //File file = new File("/avatar/default_" + forumUser.getGender().toString() + ".jpg");
         Blob blob = new SerialBlob(multipartFile.getBytes());
