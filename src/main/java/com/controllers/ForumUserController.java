@@ -253,7 +253,7 @@ public class ForumUserController {
         if (forumUser == null) return "redirect:/";
 
         //File file = new File("/avatar/default_" + forumUser.getGender().toString() + ".jpg");
-        String imageUrl = request.getScheme() + "://" + request.getServerName() + "/avatar/default_" + forumUser.getGender().toString().toLowerCase() + ".jgp";
+        String imageUrl = request.getScheme() + "://" + request.getServerName() + "/avatar/default_" + forumUser.getGender().toString().toLowerCase() + ".jpg";
         byte[] bytes = getDefaultAvatarFile(imageUrl);
         Blob blob = null;
         try {
