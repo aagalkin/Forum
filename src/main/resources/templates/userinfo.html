@@ -67,7 +67,11 @@
 <!--Content-->
 <div class="content" style="width: 1140px">
 	<div id="info" class="form-holder" style="width: 1140px; margin: auto;">
-		<h3>Профиль пользователя [[${target_user.nickname}]]</h3>
+		<h3>
+			Профиль пользователя [[${target_user.nickname}]]
+			<br>
+			<div style="font-size: 18px;" th:text="${target_user.role == 'ADMIN'} ? 'Администрация' : 'Пользователь'"></div>
+		</h3>
 		<div style="display: inline-block;"><img th:src="@{'/user/avatar/' + ${target_user.id}}" width="150px" height="150px"></div>
 		<a th:if="${forum_user}" th:href="@{'/mail/send?recipient=' + ${target_user.nickname}}"><button style="float: right;">Написать личное сообщение</button></a>
 		<div style="border-bottom-style: dashed; border-width: 1px; margin-bottom: 10px;">
