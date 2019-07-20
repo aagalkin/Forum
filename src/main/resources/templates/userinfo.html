@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
 <head>
 	<title>Профиль пользователя [[${target_user.nickname}]]</title>
 	<link rel="stylesheet" type="text/css" href="/css/profile.css">
@@ -68,7 +68,8 @@
 <div class="content" style="width: 1140px">
 	<div id="info" class="form-holder" style="width: 1140px; margin: auto;">
 		<h3>Профиль пользователя [[${target_user.nickname}]]</h3>
-		<div><img th:src="@{'/user/avatar/' + ${target_user.id}}" width="150px" height="150px"></div>
+		<div style="display: inline-block;"><img th:src="@{'/user/avatar/' + ${target_user.id}}" width="150px" height="150px"></div>
+		<a><button style="float: right;">Написать личное сообщение</button></a>
 		<div style="border-bottom-style: dashed; border-width: 1px; margin-bottom: 10px;">
 			<div class="half">
 				<b>Пол:</b>
