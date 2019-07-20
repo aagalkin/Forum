@@ -96,7 +96,7 @@
 			<tr>
 				<td class="author-block">
 					<a th:href="@{'/user/' + ${forum_message.author.id}}" class="author-name">[[${forum_message.author.nickname}]]</a>
-					<div th:text="${forum_message.author.role == 'ADMIN'} ? 'Администрация' : 'Пользователь'"></div>
+					<div th:text="${forum_message.author.role.toString() == 'ADMIN'} ? 'Администрация' : 'Пользователь'"></div>
 					<img th:src="@{'/user/avatar/' + ${forum_message.author.id}}" width="100px" height="100px" class="author-avatar">
 					<br>
 					<span class="author-info">
